@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Auth::routes(['register' => false]);
+
+
+Route::get('/', [HomeController::class, 'index'])->withoutMiddleware('auth')->name('index');
+
+Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function() {
+    Route::get('/', [AdminController::class, 'index'])->name('admin');
+
+    Route::put('/judul/{id}', [AdminController::class, 'update'])->name('judul.update');
 });
