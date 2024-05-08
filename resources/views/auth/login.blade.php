@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url('/assets/css/login.css') }}">
+    <link rel="stylesheet" href="{{ url('/assets/css/login1.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- Font Awesome -->
@@ -36,11 +36,11 @@
                             </div>
                             <input type="password" class="form-control" name="password" id="password" placeholder="Enter Password" autocomplete="off" required>
                             <div class="pass-logo-pass" style="background-color: transparent;">
-                                <button class="showPass" style="display: none;"><i class="fa-regular fa-eye-slash"></i></button>
+                                <div class="showPass" style="display: none;"><i class="fa-regular fa-eye-slash"></i></div>
                             </div>
                         </div>
                         
-                        <div class="d-grid mt-3">
+                        <div class="d-grid mt-4">
                             <button type="submit" class="btn btn-primary btn-login" name="login_btn">Login</button>
                         </div>
 

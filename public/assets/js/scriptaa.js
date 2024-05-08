@@ -16,8 +16,7 @@ window.addEventListener("scroll", () => {
 
 
 // Navbar Active
-const menuItems = document.querySelectorAll('nav ul li a');
-
+const menuItems  = document.querySelectorAll('nav ul li a');
 
 // jika nav items diclick
 menuItems.forEach(item => {
@@ -30,7 +29,6 @@ menuItems.forEach(item => {
     // Menambahkan kelas "active" pada elemen menu yang diklik
     this.classList.add('active', 'text-light');
     });
-
 });
 
 // Navbar Active End
@@ -71,3 +69,37 @@ toggleButton.addEventListener("click", function () {
     }
 });
 // See All End
+
+
+
+// Image Preview
+const previewTambahGallery = document.getElementById('preview-img-tambah');
+const inputTambahGalley = document.getElementById('image');
+
+const previewEditGallery = document.getElementById('preview-img');
+const inputEditGalley = document.getElementById('edit-image');
+
+try {
+    inputTambahGalley.onchange = (e) => {
+        if (inputTambahGalley.files && inputTambahGalley.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewTambahGallery.src = e.target.result;
+            };
+            reader.readAsDataURL(inputTambahGalley.files[0]);
+        }
+    };
+
+    inputEditGalley.onchange = (e) => {
+        if (inputEditGalley.files && inputEditGalley.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewEditGallery.src = e.target.result;
+            };
+            reader.readAsDataURL(inputEditGalley.files[0]);
+        }
+    };
+} catch (error) {
+    console.log('Fitur preview gambar tidak ditemukan!');
+}
+// Image Preview End

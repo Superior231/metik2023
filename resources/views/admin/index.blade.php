@@ -4,7 +4,7 @@
     <!-- Banner 1 - Landing Page -->
     <div class="banner" id="home" style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('assets/img/bg.jpg')}}');">
         <!-- Navbar -->
-        <nav class="navbar">
+        <nav class="navbar px-3">
             <div class="container">
                 <a class="navbar-brand" href=""><img src="{{ url('/assets/img/logo.png') }}" alt="metik_2023" style="width: 100px;"></a>
                 <ul class="links">
@@ -22,18 +22,18 @@
         </nav>
         <!-- dropdown menu -->
         <nav class="navbar_2">
-            <div class="dropdown_menu">
+            <ul class="dropdown_menu">
                 <li><a href="#home" class="active text-light">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#gallery">Gallery</a></li>
                 <li><a href="#anggaran">Anggaran</a></li>
-            </div>
+            </ul>
         </nav>
         <!-- dropdown menu end -->
         <!-- Navbar End -->
 
         <!-- Content Banner -->
-        <div class="content">
+        <div class="content px-3">
             @foreach ($judul as $item)
                 {!! $item->title !!}
                 {!! $item->subtitle !!}
@@ -85,20 +85,19 @@
                     </div>
                 </div>
                 <div class="col col-lg-8 col-md-6 col-sm-12">
-                    <div class="hidden-about">
-                        <p class="about-subjudul">{!! $item->about_subtitle !!}</p>
+                    <div class="hidden-about text-secondary">
+                        <p>{!! $item->about_subtitle !!}</p>
                     </div>
-                    <div class="about-subjudul-container">
-                        <!-- Fungsi implode =>  -->
+                    <div class="about-subjudul-container text-secondary">
+                        <!-- Fungsi implode  -->
                         <?php
-                            $subjudul = $item->about_subtitle;
+                            $about_subtitle = strip_tags($item->about_subtitle);
                             $wordLimit = 40;
-                            if (str_word_count($subjudul) > $wordLimit) {
-                                $subjudul = implode(' ', array_slice(str_word_count($subjudul, 2), 0, $wordLimit)) . ' ...';
+                            if (str_word_count($about_subtitle) > $wordLimit) {
+                                $about_subtitle = implode(' ', array_slice(str_word_count($about_subtitle, 2), 0, $wordLimit)) . ' ...';
                             }
                         ?>
-                        <!-- Fungsi implode =>  -->
-                        <p class="about-subjudul">{{ $subjudul }}</p>
+                        <p>{!! $about_subtitle !!}</p>
                     </div>
                     <button class="seeAll text-light toggle-button" id="toggleButtonSeeAll">See All</button>
                 </div>
@@ -116,27 +115,52 @@
 
 
     <!-- Banner 3 - Gallery -->
-    <div class="banner-3">
+    <div class="banner-3" style="margin-top: -10px;">
         <div class="container-gallery">
             <div class="label-gallery d-flex gap-2" id="gallery">
                 <h2><b>Gallery</b></h2>
-            </div>
-
-            <div class="row row-cols-2 row-cols-lg-5 row-cols-md-3 row-sm-1 g-3">
-                <div class="col">
-                    <div class="card">
-                        <div class="gambar">
-                            <img src="" alt="gallery image" class="card-img">
-                        </div>
-                        <div class="keterangan">
-                            <p>keterangan</p>
-                            <p>date</p>
-                            <a href=""><button class="btn btn-primary"><i class='bx bxs-download'></i></button></a>
-                        </div>
-                    </div>
+                <div class="actions">
+                    <button type="button" style="background: transparent; border-color: transparent;" data-bs-toggle="modal" data-bs-target="#tambah-gallery"><i class="fa-solid fa-square-plus fa-2x text-light"></i></button>
                 </div>
             </div>
 
+
+            <div class="row row-cols-3 row-cols-lg-5 row-cols-md-3 g-2 g-lg-3">
+                @foreach ($gallery as $item)
+                <div class="col">
+                    <div class="card">
+                        <div class="gambar">
+                            <img src="{{ asset('storage/gallery/'.$item->image) }}" alt="image" class="card-img">
+                        </div>
+
+                        <div class="actions">
+                            <a href="#" class="text-decoration-none text-light fs-3" id="galleryActions-{{ $item->id }}" data-bs-toggle="dropdown" title="Actions">
+                                <i class='bx bx-dots-vertical-rounded'></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end position-absolute z-1000" aria-labelledby="galleryActions-{{ $item->id }}">
+                                <li><a class="dropdown-item" href="#" onclick="editGallery('{{ $item->id }}', '{{ $item->image }}', '{{ $item->description }}')" data-bs-toggle="modal" data-bs-target="#edit-gallery">Edit</a></li>
+                                <li><a class="dropdown-item" href="{{ route('image.download', $item->id) }}" onclick="return confirm('Apakah Anda yakin ingin mengunduh gambar ini?')">Download</a></li>
+                                <hr class="py-0 my-1">
+                                <li>
+                                    <form class="dropdown-item" action="{{ route('gallery.destroy', $item->id) }}" method="POST">
+                                        @csrf @method('DELETE')
+
+                                        <button type="submit" class="hapus-btn d-flex bg-transparent border-0 p-0 m-0 text-danger bg-info w-100" onclick="return confirm('Anda yakin?')">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="keterangan">
+                            <p class="py-1 py-lg-3">{{ $item->description }}</p>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
         </div>
     </div>
     <!-- Banner 3 - Gallery End -->
@@ -260,6 +284,65 @@
     <!-- Banner 4 - Anggaran End -->
 
 
+    <!-- Footer -->
+    <footer class="footer" id="contacts">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-lg-4 row-cols-md-3 row-cols-sm-12 py-4 px-2">
+                <div class="col col-lg-6 col-md-7 col-sm-12">
+                    <div class="layout-logo d-flex">
+                        <img src="{{ url('/assets/img/logo.png') }}" alt="logo_metik_2023" style="width: 150px;">
+                    </div>
+
+                    <p class="text-footer text-light ms-1" style="opacity: 0.4;">METIK adalah kegiatan untuk mengenal
+                        Teknik, yaitu Teknik Mesin, Teknik Industri, Teknik Informatika, Teknik Sipil, dan Sistem Informasi.
+                        Tujuan dari kegiatan ini adalah untuk pengenalan kampus, pengenalan Fakultas Teknik dan Ilmu
+                        Komputer, dan untuk menjalin ikatan emosional / rasa memiliki Fakultas Teknik dan Ilmu Komputer.
+                    </p>
+                </div>
+
+                <div class="col col-lg-2 col-md-1 col-sm-12"></div>
+
+                <div class="col col-lg-2 col-md-4 col-sm-6">
+                    <h4 style="width: min-content;">Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#anggaran">Anggaran</a></li>
+                    </ul>
+                </div>
+
+                <div class="col col-lg-2 col-md-12 col-sm-6">
+                    <h4 style="width: min-content;">Contacts</h4>
+                    <ul>
+                        <li><a href="#">Help / FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="col col-lg-12 col-md-12 col-sm-12 mt-2">
+                    <div class="social-media ms-1">
+                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}" alt="logo_informatika"
+                            style="width: 40px;">
+                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}" alt="logo_sistem_informasi"
+                            style="width: 40px;">
+                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}" alt="logo_mesin" style="width: 40px;">
+                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}" alt="logo_industri" style="width: 40px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <h6 class="px-2 pt-2 text-center">copyright &copy;2023 Metik.</h6>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer End -->
+
+
+
+
     <!-- Modal Judul -->
     @foreach ($judul as $item)
         <!-- Judul -->
@@ -288,6 +371,7 @@
                         </div>
 
                         <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Edit</button>
                         </div>
                     </div>
@@ -321,6 +405,7 @@
                         </div>
 
                         <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Edit</button>
                         </div>
                     </div>
@@ -330,31 +415,135 @@
     @endforeach
     <!-- Modal Judul End -->
 
-    @push('script')
-    <script>
-        $('#edit-judul').summernote({
-          placeholder: 'Hello stand alone ui',
-          tabsize: 2,
-          height: 120
-        });
 
-        $('#edit-subjudul').summernote({
-          placeholder: 'Hello stand alone ui',
-          tabsize: 2,
-          height: 120
-        });
+    <!-- Modal Gallery -->
+        <!-- Tambah Gallery -->
+        <form action="{{ route('gallery.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="modal fade" id="tambah-gallery" tabindex="-1" aria-labelledby="tambahGalleryModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="tambahGalleryModalLabel">Tambah gallery</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+    
+                        <div class="modal-body">
+                            <label for="image" class="">Image</label>
+                            <div class="input-group flex-nowrap">
+                                <input type="file" accept="image/*" name="image" class="form-control" id="image" aria-label="gambar" aria-describedby="addon-wrapping" required>
+                            </div>
+    
+                            <label for="description" class="mt-3">Keterangan</label>
+                            <div class="input-group flex-nowrap">
+                                <span class="input-group-text" id="addon-wrapping"><i class="fa-solid fa-circle-info"></i></span>
+                                <input type="text" name="description" id="description" class="form-control" placeholder="Masukkan keterangan gambar..." aria-label="keterangan" aria-describedby="addon-wrapping" autocomplete="off">
+                            </div>
+                        </div>
+    
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button onclick="tambahGallery()" type="submit" name="tambahGallery_btn" class="btn btn-primary btn-tambah-gallery">Tambah</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
 
-        $('#edit-about-judul').summernote({
-          placeholder: 'Hello stand alone ui',
-          tabsize: 2,
-          height: 120
-        });
+        <!-- Edit Gallery -->
+        <form method="POST" enctype="multipart/form-data" id="edit-gallery-form">
+            @csrf @method('PUT')
+        
+            <div class="modal fade" id="edit-gallery" tabindex="-1" aria-labelledby="edit-gallery" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit gallery</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+        
+                        <div class="modal-body">
+                            <input type="hidden" id="id" name="id">
 
-        $('#edit-about-subjudul').summernote({
-          placeholder: 'Hello stand alone ui',
-          tabsize: 2,
-          height: 120
-        });
-    </script>
-    @endpush
+                            <div class="preview">
+                                <div class="preview-container">
+                                    <img src="" alt="image" id="preview-img">
+                                </div>
+                            </div>
+        
+                            <label for="image" class="">Image</label>
+                            <div class="input-group flex-nowrap">
+                                <input type="file" accept="image/*" name="image" class="form-control" id="edit-image" aria-label="image" aria-describedby="addon-wrapping">
+                            </div>
+        
+                            <label for="description" class="mt-2">Keterangan</label>
+                            <div class="input-group flex-nowrap">
+                                <span class="input-group-text" id="addon-wrapping"><i class="fa-solid fa-circle-info"></i></span>
+                                <input type="text" name="description" id="edit-description" class="form-control" placeholder="keterangan" aria-label="keterangan" aria-describedby="addon-wrapping" autocomplete="off">
+                            </div>
+                        </div>
+        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary edit_gallery_btn">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    <!-- Modal Gallery End -->
+
+
+    @include('components.toast')
+
 @endsection
+
+
+
+@push('script')
+<script>
+    $('#edit-judul').summernote({
+      placeholder: 'Hello stand alone ui',
+      tabsize: 2,
+      height: 120
+    });
+
+    $('#edit-subjudul').summernote({
+      placeholder: 'Hello stand alone ui',
+      tabsize: 2,
+      height: 120
+    });
+
+    $('#edit-about-judul').summernote({
+      placeholder: 'Hello stand alone ui',
+      tabsize: 2,
+      height: 120
+    });
+
+    $('#edit-about-subjudul').summernote({
+      placeholder: 'Hello stand alone ui',
+      tabsize: 2,
+      height: 120
+    });
+
+    $(document).ready(function(){
+        // Cek apakah ada session success
+        if ("{{ session()->has('success') }}") {
+            // Tampilkan toast
+            $('#toast-success-content').toast('show');
+        }
+    });
+
+
+    function editGallery(id, image, description) {
+        $('#id').val(id);
+        $('#edit-image').val('');
+        $('#edit-description').val(description);
+
+        $('#preview-img').attr('src', "{{ asset('storage/gallery/', '') }}" + '/' + image);
+
+        $('#edit-gallery-form').attr('action', "{{ route('gallery.update', '') }}" + '/' + id);
+        $('#edit-gallery').modal('show');
+    }
+</script>
+@endpush

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Gallery;
 use App\Models\Judul;
 use Illuminate\Http\Request;
 
@@ -10,9 +11,11 @@ class AdminController extends Controller
 {
     public function index() {
         $judul = Judul::all();
+        $gallery = Gallery::all();
 
         return view('admin.index', [
-            'judul' => $judul
+            'judul' => $judul,
+            'gallery' => $gallery
         ]);
     }
 
@@ -35,6 +38,6 @@ class AdminController extends Controller
 
         $judul->save();
 
-        return redirect()->route('admin')->with('success', 'Anime berhasil diedit!');
+        return redirect()->back()->with('success', 'Content berhasil diedit!');
     }
 }

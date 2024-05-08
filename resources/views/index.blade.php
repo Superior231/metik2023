@@ -4,7 +4,7 @@
     <!-- Banner 1 - Landing Page -->
     <div class="banner" id="home" style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('assets/img/bg.jpg')}}');">
         <!-- Navbar -->
-        <nav class="navbar">
+        <nav class="navbar px-3">
             <div class="container">
                 <a class="navbar-brand" href=""><img src="{{ url('/assets/img/logo.png') }}" alt="metik_2023" style="width: 100px;"></a>
                 <ul class="links">
@@ -22,21 +22,21 @@
         </nav>
         <!-- dropdown menu -->
         <nav class="navbar_2">
-            <div class="dropdown_menu">
+            <ul class="dropdown_menu">
                 <li><a href="#home" class="active text-light">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#gallery">Gallery</a></li>
                 <li><a href="#anggaran">Anggaran</a></li>
-            </div>
+            </ul>
         </nav>
         <!-- dropdown menu end -->
         <!-- Navbar End -->
 
         <!-- Content Banner -->
-        <div class="content">
+        <div class="content px-3">
             @foreach ($judul as $item)
-                <h1 id="editable-judul">{!! $item->title !!}</h1>
-                <p id="editable-subjudul">{!! $item->subtitle !!}</p>
+                {!! $item->title !!}
+                {!! $item->subtitle !!}
             @endforeach
 
             <div class="button">
@@ -59,16 +59,23 @@
             <div class="row row-cols-1 row-cols-lg-2">
                 <div class="col col-lg-4 col-md-6 col-sm-12">
                     <div class="text-about">
-                        <h3>About Judul</h3>
+                        <h3>{!! $item->about_title !!}</h3>
                     </div>
                 </div>
                 <div class="col col-lg-8 col-md-6 col-sm-12">
-                    <div class="hidden-about">
-                        <p class="about-subjudul"></p>
+                    <div class="hidden-about text-secondary">
+                        <p>{!! $item->about_subtitle !!}</p>
                     </div>
-                    <div class="about-subjudul-container">
-                        <!-- Fungsi implode =>  -->
-                        <p class="about-subjudul"></p>
+                    <div class="about-subjudul-container text-secondary">
+                        <!-- Fungsi implode  -->
+                        <?php
+                            $about_subtitle = strip_tags($item->about_subtitle);
+                            $wordLimit = 40;
+                            if (str_word_count($about_subtitle) > $wordLimit) {
+                                $about_subtitle = implode(' ', array_slice(str_word_count($about_subtitle, 2), 0, $wordLimit)) . ' ...';
+                            }
+                        ?>
+                        <p>{!! $about_subtitle !!}</p>
                     </div>
                     <button class="seeAll text-light toggle-button" id="toggleButtonSeeAll">See All</button>
                 </div>
@@ -85,27 +92,37 @@
 
 
     <!-- Banner 3 - Gallery -->
-    <div class="banner-3">
+    <div class="banner-3" style="margin-top: -10px;">
         <div class="container-gallery">
             <div class="label-gallery d-flex gap-2" id="gallery">
                 <h2><b>Gallery</b></h2>
             </div>
 
-            <div class="row row-cols-2 row-cols-lg-5 row-cols-md-3 row-sm-1 g-3">
+            <div class="row row-cols-3 row-cols-lg-5 row-cols-md-3 row-sm-1 g-2 g-lg-3">
+                @forelse ($gallery as $item)
                 <div class="col">
                     <div class="card">
                         <div class="gambar">
-                            <img src="" alt="gallery image" class="card-img">
+                            <img src="{{ asset('storage/gallery/'.$item->image) }}" alt="image" class="card-img">
                         </div>
+
+                        <div class="actions d-flex align-items-center justify-content-center p-0 m-0 pb-2 pb-lg-3">
+                            <a href="{{ route('image.download', $item->id) }}" onclick="return confirm('Apakah Anda yakin ingin mengunduh gambar ini?')" class="text-decoration-none text-light fw-semibold fs-4" title="Download" class="bg-success w-100">
+                                <i class='bx bxs-download'></i>
+                            </a>
+                        </div>
+
                         <div class="keterangan">
-                            <p>keterangan</p>
-                            <p>date</p>
-                            <a href=""><button class="btn btn-primary"><i class='bx bxs-download'></i></button></a>
+                            <p class="py-1 py-lg-3">{{ $item->description }}</p>
                         </div>
                     </div>
                 </div>
+                @empty
+                    <div class="error-message d-flex align-items-center justify-content-center w-100">
+                        <span class="text-light fw-semibold text-center">No image found.</span>
+                    </div>
+                @endforelse
             </div>
-
         </div>
     </div>
     <!-- Banner 3 - Gallery End -->
@@ -235,13 +252,14 @@
             <div class="row row-cols-1 row-cols-lg-4 row-cols-md-3 row-cols-sm-12 py-4 px-2">
                 <div class="col col-lg-6 col-md-7 col-sm-12">
                     <div class="layout-logo d-flex">
-                        <img src="assets/logo.png" alt="logo_metik_2023" style="width: 150px;">
+                        <img src="{{ url('/assets/img/logo.png') }}" alt="logo_metik_2023" style="width: 150px;">
                     </div>
 
                     <p class="text-footer text-light ms-1" style="opacity: 0.4;">METIK adalah kegiatan untuk mengenal
                         Teknik, yaitu Teknik Mesin, Teknik Industri, Teknik Informatika, Teknik Sipil, dan Sistem Informasi.
                         Tujuan dari kegiatan ini adalah untuk pengenalan kampus, pengenalan Fakultas Teknik dan Ilmu
-                        Komputer, dan untuk menjalin ikatan emosional / rasa memiliki Fakultas Teknik dan Ilmu Komputer.</p>
+                        Komputer, dan untuk menjalin ikatan emosional / rasa memiliki Fakultas Teknik dan Ilmu Komputer.
+                    </p>
                 </div>
 
                 <div class="col col-lg-2 col-md-1 col-sm-12"></div>
@@ -265,12 +283,12 @@
 
                 <div class="col col-lg-12 col-md-12 col-sm-12 mt-2">
                     <div class="social-media ms-1">
-                        <img class="me-2" src="assets/logo_informatika.jpg" alt="logo_informatika"
+                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}" alt="logo_informatika"
                             style="width: 40px;">
-                        <img class="me-2" src="assets/logo_informatika.jpg" alt="logo_sistem_informasi"
+                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}" alt="logo_sistem_informasi"
                             style="width: 40px;">
-                        <img class="me-2" src="assets/logo_informatika.jpg" alt="logo_mesin" style="width: 40px;">
-                        <img class="me-2" src="assets/logo_informatika.jpg" alt="logo_industri" style="width: 40px;">
+                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}" alt="logo_mesin" style="width: 40px;">
+                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}" alt="logo_industri" style="width: 40px;">
                     </div>
                 </div>
             </div>

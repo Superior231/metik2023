@@ -66,16 +66,15 @@ label {
 
 .pass-logo-pass {
   position: absolute;
-  height: 35px;
+  height: 38px;
   width: 38px;
   background: transparent;
-  line-height: 32px;
+  line-height: 33px;
   font-size: 15px;
   text-align: center;
-  border-radius: 3px 0 0 3px;
   border: 1px;
   padding-top: 2px;
-  margin-left: 88%;
+  margin-left: 86%;
 }
 @media (max-width: 300px) {
   .pass-logo-pass {
@@ -91,10 +90,6 @@ label {
     padding-top: 2px;
     margin-left: 83%;
   }
-}
-.pass-logo-pass button {
-  background-color: transparent;
-  border-color: transparent;
 }
 
 .content input {
