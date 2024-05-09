@@ -61,9 +61,9 @@
         <div class="edit d-flex">
             @foreach ($judul as $item)
                 <div class="container">
-                    <button class="btn btn-secondary" id="edit-judul-btn" data-bs-toggle="modal"
-                        data-bs-target="#editJudulModal{{ $item->id }}"><i
-                            class="fa-solid fa-pencil my-auto">&nbsp;</i>Edit</button>
+                    <button class="btn btn-primary" id="edit-judul-btn" data-bs-toggle="modal" data-bs-target="#editJudulModal{{ $item->id }}" title="Edit">
+                        <i class="fa-solid fa-pencil"></i>
+                    </button>
                 </div>
             @endforeach
         </div>
@@ -82,9 +82,9 @@
 
                 <div class="edit d-flex">
                     <div class="container">
-                        <button class="btn btn-secondary" id="edit-judul-btn" data-bs-toggle="modal"
-                            data-bs-target="#editAboutModal{{ $item->id }}"><i
-                                class="fa-solid fa-pencil my-auto">&nbsp;</i>Edit</button>
+                        <button class="btn btn-primary" id="edit-judul-btn" data-bs-toggle="modal" data-bs-target="#editAboutModal{{ $item->id }}" title="Edit">
+                            <i class="fa-solid fa-pencil"></i>
+                        </button>
                     </div>
                 </div>
 
