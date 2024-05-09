@@ -367,9 +367,30 @@
   align-items: center;
   gap: 6px;
 }
-table thead th.text-center {
-  background-color: #257cc4;
+table thead tr th {
+  background-color: #257cc4 !important;
   color: #ffffff;
+}
+
+select {
+  margin-right: 10px !important;
+}
+select option {
+  color: black;
+}
+
+
+button.dt-paging-button {
+  background-color: transparent !important;
+  border: 1px solid #808080 !important;
+  color: #fff !important;
+}
+button.dt-paging-button.current {
+  background-color: #0d6efd !important;
+  color: #03030a !important;
+}
+button.dt-paging-button.disabled {
+  background-color: #dee2e6 !important;
 }
 /* Anggaran End */
 
@@ -444,11 +465,15 @@ input.form-control:focus {
 
 
 /* Toast */
-.toast {
+#toast .toast,
+#toast .toast-error {
   opacity: 0 !important;
+  display: none !important;
 }
-#toast-success .toast.show {
+#toast .toast.show,
+#toast .toast-error.show {
   opacity: 1 !important;
+  display: block !important;
   animation: fadeInOut 1s ease-in-out;
 }
 @keyframes fadeInOut {
@@ -465,20 +490,21 @@ input.form-control:focus {
     transform: translateX(0);
   }
 }
-#toast-success {
+#toast {
   position: fixed;
   bottom: 0;
   right: 0;
 }
 @media (max-width: 768px) {
-  #toast-success {
+  #toast {
     position: fixed;
     width: max-content;
     height: 0px;
     top: 50px;
     right: 0px;
   }
-  #toast-success .toast {
+  #toast .toast,
+  #toast .toast-error {
     width: 250px;
   }
 }

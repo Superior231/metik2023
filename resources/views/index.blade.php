@@ -1,5 +1,10 @@
 @extends('layouts.main')
 
+@push('style')
+    <link rel="stylesheet" href="//cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css">
+@endpush
+
+
 @section('content')
     <!-- Banner 1 - Landing Page -->
     <div class="banner" id="home" style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('assets/img/bg.jpg')}}');">
@@ -103,7 +108,7 @@
                 <div class="col">
                     <div class="card">
                         <div class="gambar">
-                            <img src="{{ asset('storage/gallery/'.$item->image) }}" alt="image" class="card-img">
+                            <img src="{{ asset('storage/gallery/'.$item->image) }}" alt="image" class="card-img" loading="lazy">
                         </div>
 
                         <div class="actions d-flex align-items-center justify-content-center p-0 m-0 pb-2 pb-lg-3">
@@ -140,66 +145,44 @@
                 <h2><b>Anggaran</b></h2>
             </div>
 
-            <!-- Actions -->
-            <div class="actions mb-2">
-                <a href=""><button type="button" style="background: transparent; border-color: transparent;"><i
-                            class="fa-solid fa-rotate-right fa-2x text-light"></i></button></a>
-            </div>
-            <!-- Actions End -->
-
             <!-- Table -->
             <div class="table-responsive text-light">
-                <table id="myDataTable" class="table table-hover table-striped table-bordered table-sm" style="width:100%">
-                    <thead class="table-info">
+                <table id="myDataTable" class="table table-light table-borderless table-striped table-hover table-sm" style="width:100%">
+                    <thead>
                         <tr>
-                            <th class="text-center">Nama Barang</th>
-                            <th class="text-center">Type</th>
-                            <th class="text-center">Satuan</th>
-                            <th class="text-center">Jumlah</th>
-                            <th class="text-center">Harga<span style="color: red;">*</span></th>
-                            <th class="text-center">Date</th>
-                            <th class="text-center">Kwitansi</th>
+                            <th class="text-center align-middle">Nama Barang</th>
+                            <th class="text-center align-middle">Type</th>
+                            <th class="text-center align-middle">Satuan</th>
+                            <th class="text-center align-middle">Jumlah</th>
+                            <th class="text-center align-middle">Harga<span style="color: red;">*</span></th>
+                            <th class="text-center align-middle">Date</th>
+                            <th class="text-center align-middle">Kwitansi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="ps-3">nama barang</td>
-                            <td>type</td>
-                            <td class="text-end">harga satuaan</td>
-                            <td class="text-end">jumlah</td>
-                            <td class="text-end">harga</td>
-                            <td class="text-center">date</td>
-                            <td class="text-center"><button class="btn btn-secondary" data-bs-toggle="modal"
-                                    data-bs-target="#kwitansiModal">Lihat</button></td>
-                        </tr>
-
-                        <!-- Modal Bukti Pembayaran -->
-                        <div class="modal fade" id="kwitansiModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content text-dark">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Bukti Pembayaran</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <img class="img mx-auto d-block" src="" style="width: 60%;">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <a href="" class="btn btn-primary">Download</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Modal Bukti Pembayaran End -->
+                        @foreach ($anggaran as $item)
+                            <tr>
+                                <td class="ps-3">{{ $item->name }}</td>
+                                <td>{{ $item->type }}</td>
+                                <td>{{ "Rp " . number_format($item->satuan,0,',','.') }}</td>
+                                <td class="text-start">{{ $item->jumlah }}</td>
+                                <td>{{ "Rp " . number_format($item->harga,0,',','.') }}</td>
+                                <td class="text-center">{{ $item->date }}</td>
+                                <td class="text-center">
+                                    @if ($item->image)
+                                        <button class="btn btn-secondary" onclick="kwitansi('{{ $item->id }}', '{{ $item->image }}')" data-bs-toggle="modal" data-bs-target="#kwitansiModal">Lihat</button>
+                                        
+                                    @else
+                                        <span>-</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
                             <th colspan="5" class="text-center">Jumlah</th>
-                            <th colspan="1" class="text-end">Rp. jumlah</th>
+                            <th colspan="1" class="text-end">{{ "Rp " . number_format($jml_anggaran,0,',','.') }}</th>
                             <th></th>
                         </tr>
                     </tfoot>
@@ -210,10 +193,12 @@
 
             <!-- Download file pdf Anggaran -->
             <div class="download-action mt-4">
-                <a href="cetak_anggaran.php" target="_blank"><button class="btn btn-primary"
-                        style="border-radius: 0px;">Download pdf</button></a>
-                <a href="export_to_excel.php" target="_blank"><button class="btn btn-success"
-                        style="border-radius: 0px;">Export to Excel</button></a>
+                <a href="cetak_anggaran.php" target="_blank">
+                    <button class="btn btn-primary" style="border-radius: 0px;">Download pdf</button>
+                </a>
+                <a href="export_to_excel.php" target="_blank">
+                    <button class="btn btn-success" style="border-radius: 0px;">Export to Excel</button>
+                </a>
             </div>
             <!-- Download file pdf Anggaran End -->
 
@@ -301,4 +286,62 @@
         </div>
     </footer>
     <!-- Footer End -->
+
+
+    <!-- Modal Bukti Pembayaran -->
+    <div class="modal fade" id="kwitansiModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content text-dark">
+                <div class="modal-header">
+                    <input type="hidden" id="kwitansi_id">
+                    <h5 class="modal-title" id="exampleModalLabel">Bukti Pembayaran</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img class="img mx-auto d-block" src="" id="kwitansi_img" loading="lazy" style="width: 60%;">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a id="download_kwitansi" class="btn btn-primary" onclick="return confirm('Apakah Anda yakin ingin mengunduh gambar ini?')">Download</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @include('components.toast')
 @endsection
+
+
+@push('script')
+    <script src="//cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Cek apakah ada session success
+            if ("{{ session()->has('success') }}") {
+                // Tampilkan toast
+                $('#toast-success-content').toast('show');
+            }
+            if ("{{ session()->has('error') }}") {
+                // Tampilkan toast
+                $('#toast-error-content').toast('show');
+            }
+
+            $('#myDataTable').DataTable();
+        });
+
+        $('#myDataTable').DataTable({
+            "language": {
+                "searchPlaceholder": "Search here..."
+            }
+        });
+
+        
+        function kwitansi(id, image) {
+            $('#kwitansi_id').val(id);
+            $('#kwitansi_img').attr('src', "{{ asset('storage/anggaran/', '') }}" + '/' + image);
+            $('#download_kwitansi').attr('href', "{{ route('kwitansi.download', '') }}" + '/' + id);
+        }
+    </script>
+@endpush

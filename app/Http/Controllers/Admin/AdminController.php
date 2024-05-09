@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Anggaran;
 use App\Models\Gallery;
 use App\Models\Judul;
 use Illuminate\Http\Request;
@@ -12,10 +13,15 @@ class AdminController extends Controller
     public function index() {
         $judul = Judul::all();
         $gallery = Gallery::all();
+        $anggaran = Anggaran::all();
+
+        $jumlah_anggaran = $anggaran->sum('harga');
 
         return view('admin.index', [
             'judul' => $judul,
-            'gallery' => $gallery
+            'gallery' => $gallery,
+            'anggaran' => $anggaran,
+            'jml_anggaran' => $jumlah_anggaran
         ]);
     }
 

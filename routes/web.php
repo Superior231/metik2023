@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AnggaranController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
@@ -22,13 +23,13 @@ Auth::routes(['register' => false]);
 
 
 Route::get('/', [HomeController::class, 'index'])->withoutMiddleware('auth')->name('index');
-Route::get('/download/{id}', [HomeController::class, 'download_image'])->name('image.download');
+Route::get('/download/{id}', [HomeController::class, 'download_image'])->withoutMiddleware('auth')->name('image.download');
+Route::get('/kwitansi/{id}', [HomeController::class, 'download_kwitansi'])->withoutMiddleware('auth')->name('kwitansi.download');
 
 Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function() {
     Route::get('/', [AdminController::class, 'index'])->name('admin');
-
     Route::put('/judul/{id}', [AdminController::class, 'update'])->name('judul.update');
 
-    // Gallery
     Route::resource('gallery', GalleryController::class);
+    Route::resource('anggaran', AnggaranController::class);
 });

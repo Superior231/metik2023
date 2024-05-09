@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Anggaran;
 use App\Models\Gallery;
 use App\Models\Judul;
 use Illuminate\Http\Request;
@@ -27,10 +28,15 @@ class HomeController extends Controller
     {
         $judul = Judul::all();
         $gallery = Gallery::all();
+        $anggaran = Anggaran::all();
+
+        $jumlah_anggaran = $anggaran->sum('harga');
 
         return view('index', [
             'judul' => $judul,
-            'gallery' => $gallery
+            'gallery' => $gallery,
+            'anggaran' => $anggaran,
+            'jml_anggaran' => $jumlah_anggaran
         ]);
     }
 
@@ -40,6 +46,19 @@ class HomeController extends Controller
 
         if ($gallery) {
             $imagePath = storage_path('app/public/gallery/' . $gallery->image);
+
+            return response()->download($imagePath);
+        }
+
+        return redirect()->back()->with('error', 'Gambar tidak ditemukan!');
+    }
+
+    public function download_kwitansi($id)
+    {
+        $anggaran = Anggaran::find($id);
+
+        if ($anggaran && $anggaran->image) {
+            $imagePath = storage_path('app/public/anggaran/' . $anggaran->image);
 
             return response()->download($imagePath);
         }
