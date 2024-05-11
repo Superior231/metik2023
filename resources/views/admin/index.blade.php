@@ -39,13 +39,27 @@
         <!-- Navbar End -->
 
         <!-- Content Banner -->
-        <div class="content px-3">
+        <div class="edit d-flex">
             @foreach ($judul as $item)
-                {!! $item->title !!}
-                {!! $item->subtitle !!}
+                <div class="container">
+                    <button class="btn btn-primary" id="edit-judul-btn" data-bs-toggle="modal" data-bs-target="#editJudulModal{{ $item->id }}" title="Edit">
+                        <i class="fa-solid fa-pencil"></i>
+                    </button>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="content px-0 px-lg-3">
+            @foreach ($judul as $item)
+                <div class="title">
+                    {!! $item->title !!}
+                </div>
+                <div class="subtitle mt-3">
+                    {!! $item->subtitle !!}
+                </div>
             @endforeach
 
-            <div class="button">
+            <div class="button d-flex flex-wrap justify-content-center gap-3 mt-4">
                 <a href="{{ route('logout') }}"
                     onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">
@@ -57,16 +71,6 @@
                 <a href="#contacts"><button type="button"><span></span>Contact Us</button></a>
             </div>
         </div>
-
-        <div class="edit d-flex">
-            @foreach ($judul as $item)
-                <div class="container">
-                    <button class="btn btn-primary" id="edit-judul-btn" data-bs-toggle="modal" data-bs-target="#editJudulModal{{ $item->id }}" title="Edit">
-                        <i class="fa-solid fa-pencil"></i>
-                    </button>
-                </div>
-            @endforeach
-        </div>
         <!-- Content Banner End -->
     </div>
     <!-- Banner 1 - Landing Page End -->
@@ -76,17 +80,17 @@
     @foreach ($judul as $item)
         <div class="banner-2">
             <div class="container-about">
-                <div class="label-about" id="about">
+                <div class="label-about d-flex" id="about">
                     <h2><b>About</b></h2>
-                </div>
-
-                <div class="edit d-flex">
-                    <div class="container">
-                        <button class="btn btn-primary" id="edit-judul-btn" data-bs-toggle="modal" data-bs-target="#editAboutModal{{ $item->id }}" title="Edit">
-                            <i class="fa-solid fa-pencil"></i>
-                        </button>
+                    <div class="edit d-flex">
+                        <div class="container">
+                            <button class="btn btn-primary" id="edit-judul-btn" data-bs-toggle="modal" data-bs-target="#editAboutModal{{ $item->id }}" title="Edit">
+                                <i class="fa-solid fa-pencil"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
+
 
                 <div class="row row-cols-1 row-cols-lg-2">
                     <div class="col col-lg-4 col-md-6 col-sm-12">
@@ -269,7 +273,9 @@
 
             <!-- Download file pdf Anggaran -->
             <div class="download-action d-flex flex-wrap align-items-center gap-2 mt-4">
-                <a href="cetak_anggaran.php" target="_blank"><button class="btn btn-primary" style="border-radius: 0px;">Download pdf</button></a>
+                <a href="{{ route('anggaran.pdf') }}">
+                    <button class="btn btn-primary" style="border-radius: 0px;">Download pdf</button>
+                </a>
                 <a href="{{ route('anggaran.excel') }}">
                     <button class="btn btn-success" style="border-radius: 0px;">Export to Excel</button>
                 </a>

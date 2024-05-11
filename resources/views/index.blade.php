@@ -38,15 +38,23 @@
         <!-- Navbar End -->
 
         <!-- Content Banner -->
-        <div class="content px-3">
+        <div class="content px-0 px-lg-3">
             @foreach ($judul as $item)
-                {!! $item->title !!}
-                {!! $item->subtitle !!}
+                <div class="title">
+                    {!! $item->title !!}
+                </div>
+                <div class="subtitle mt-3">
+                    {!! $item->subtitle !!}
+                </div>
             @endforeach
 
-            <div class="button">
-                <a href="{{ route('login') }}"><button type="button" style="background-color: #257cc4;">Get Started</button></a>
-                <a href="#contacts"><button type="button"><span></span>Contact Us</button></a>
+            <div class="button d-flex flex-wrap justify-content-center gap-3 mt-4">
+                <a href="{{ route('login') }}">
+                    <button type="button" style="background-color: #257cc4;">Get Started</button>
+                </a>
+                <a href="#contacts">
+                    <button type="button"><span></span>Contact Us</button>
+                </a>
             </div>
         </div>
         <!-- Content Banner End -->
