@@ -7,12 +7,17 @@
 
 @section('content')
     <!-- Banner 1 - Landing Page -->
-    <div class="banner" id="home"
-        style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('assets/img/bg.jpg') }}');">
+    @foreach ($content as $item)
+    <div class="banner" id="home" style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ $item->background ? asset('storage/background/' . $item->background) : asset('assets/img/bg.jpg')}}');">
+    @endforeach
         <!-- Navbar -->
         <nav class="navbar px-3">
             <div class="container">
-                <a class="navbar-brand" href=""><img src="{{ url('/assets/img/logo.png') }}" alt="metik_2023" style="width: 100px;"></a>
+                @foreach ($content as $item)
+                    <a class="navbar-brand" href="">
+                        <img src="{{ asset('storage/logo/' . $item->logo) }}" alt="metik_2023" style="width: 100px;">
+                    </a>  
+                @endforeach
                 <ul class="links">
                     <li><a href="#home" class="active text-light">Home</a></li>
                     <li><a href="#about">About</a></li>
@@ -40,8 +45,16 @@
 
         <!-- Content Banner -->
         <div class="edit d-flex">
-            @foreach ($judul as $item)
-                <div class="container">
+            @foreach ($content as $item)
+                <div class="container d-flex gap-2">
+                    <button class="btn btn-primary d-flex align-items-center gap-2" id="edit-logo-btn" data-bs-toggle="modal" data-bs-target="#editLogoModal{{ $item->id }}" title="Edit">
+                        <i class='bx bx-image-alt'></i> Logo
+                    </button>
+
+                    <button class="btn btn-primary d-flex align-items-center gap-2" id="edit-background-btn" data-bs-toggle="modal" data-bs-target="#editBackgroundModal{{ $item->id }}" title="Edit">
+                        <i class='bx bx-image-alt'></i> Background
+                    </button>
+
                     <button class="btn btn-primary" id="edit-judul-btn" data-bs-toggle="modal" data-bs-target="#editJudulModal{{ $item->id }}" title="Edit">
                         <i class="fa-solid fa-pencil"></i>
                     </button>
@@ -50,7 +63,7 @@
         </div>
 
         <div class="content px-0 px-lg-3">
-            @foreach ($judul as $item)
+            @foreach ($content as $item)
                 <div class="title">
                     {!! $item->title !!}
                 </div>
@@ -77,7 +90,7 @@
 
 
     <!-- Banner 2 - About -->
-    @foreach ($judul as $item)
+    @foreach ($content as $item)
         <div class="banner-2">
             <div class="container-about">
                 <div class="label-about d-flex" id="about">
@@ -312,80 +325,133 @@
 
 
     <!-- Footer -->
-    <footer class="footer" id="contacts">
-        <div class="container">
-            <div class="row row-cols-1 row-cols-lg-4 row-cols-md-3 row-cols-sm-12 py-4 px-2">
-                <div class="col col-lg-6 col-md-7 col-sm-12">
-                    <div class="layout-logo d-flex">
-                        <img src="{{ url('/assets/img/logo.png') }}" alt="logo_metik_2023" style="width: 150px;">
-                    </div>
-
-                    <p class="text-footer text-light ms-1" style="opacity: 0.4;">METIK adalah kegiatan untuk mengenal
-                        Teknik, yaitu Teknik Mesin, Teknik Industri, Teknik Informatika, Teknik Sipil, dan Sistem Informasi.
-                        Tujuan dari kegiatan ini adalah untuk pengenalan kampus, pengenalan Fakultas Teknik dan Ilmu
-                        Komputer, dan untuk menjalin ikatan emosional / rasa memiliki Fakultas Teknik dan Ilmu Komputer.
-                    </p>
-                </div>
-
-                <div class="col col-lg-2 col-md-1 col-sm-12"></div>
-
-                <div class="col col-lg-2 col-md-4 col-sm-6">
-                    <h4 style="width: min-content;">Links</h4>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#gallery">Gallery</a></li>
-                        <li><a href="#anggaran">Anggaran</a></li>
-                    </ul>
-                </div>
-
-                <div class="col col-lg-2 col-md-12 col-sm-6">
-                    <h4 style="width: min-content;">Contacts</h4>
-                    <ul>
-                        <li><a href="#">Help / FAQ</a></li>
-                    </ul>
-                </div>
-
-                <div class="col col-lg-12 col-md-12 col-sm-12 mt-2">
-                    <div class="social-media ms-1">
-                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}" alt="logo_informatika"
-                            style="width: 40px;">
-                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}"
-                            alt="logo_sistem_informasi" style="width: 40px;">
-                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}" alt="logo_mesin"
-                            style="width: 40px;">
-                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}" alt="logo_industri"
-                            style="width: 40px;">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
+    @foreach ($content as $item)
+        <footer class="footer" id="contacts">
             <div class="container">
-                <h6 class="px-2 pt-2 text-center">copyright &copy;2023 Metik.</h6>
+                <div class="row row-cols-1 row-cols-lg-4 row-cols-md-3 row-cols-sm-12 py-4 px-2">
+                    <div class="col col-lg-6 col-md-7 col-sm-12">
+                        <div class="layout-logo d-flex">
+                            <img src="{{ asset('storage/logo/' . $item->logo) }}" alt="logo_metik_2023" style="width: 150px;">
+                            <div class="edit d-flex">
+                                <div class="container">
+                                    <button class="btn btn-primary" id="edit-footer-btn" data-bs-toggle="modal" data-bs-target="#editFooterModal{{ $item->id }}" title="Edit">
+                                        <i class="fa-solid fa-pencil"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-footer" style="opacity: 0.4;">
+                            {!! $item->footer !!}
+                        </p>
+                    </div>
+
+                    <div class="col col-lg-2 col-md-1 col-sm-12"></div>
+
+                    <div class="col col-lg-2 col-md-4 col-sm-6">
+                        <h4 style="width: min-content;">Links</h4>
+                        <ul>
+                            <li><a href="#home">Home</a></li>
+                            <li><a href="#about">About</a></li>
+                            <li><a href="#gallery">Gallery</a></li>
+                            <li><a href="#anggaran">Anggaran</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col col-lg-2 col-md-12 col-sm-6">
+                        <h4 style="width: min-content;">Contacts</h4>
+                        <ul>
+                            <li><a href="#">Help / FAQ</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </div>
-    </footer>
+
+            <div class="footer-bottom">
+                <div class="container">
+                    <h6 class="px-2 pt-2 text-center">copyright &copy;2023 Metik.</h6>
+                </div>
+            </div>
+        </footer>    
+    @endforeach
     <!-- Footer End -->
 
 
 
 
-    <!-- Modal Judul -->
-    @foreach ($judul as $item)
+    <!-- Modal Content -->
+    @foreach ($content as $item)
+        <!-- Logo -->
+        <form action="{{ route('content.update', $item->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf @method('PUT')
+
+            <div class="modal fade" id="editLogoModal{{ $item->id }}" tabindex="-1"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit logo</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <input type="hidden" name="id" value="{{ $item->id }}">
+                            <div class="form-input">
+                                <label for="edit-logo">Image</label>
+                                <input type="file" accept="image/*" class="form-control" name="logo" id="edit-logo" value="{{ $item->logo }}">
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Background -->
+        <form action="{{ route('content.update', $item->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf @method('PUT')
+
+            <div class="modal fade" id="editBackgroundModal{{ $item->id }}" tabindex="-1"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit background</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <input type="hidden" name="id" value="{{ $item->id }}">
+                            <div class="form-input">
+                                <label for="edit-background">Image</label>
+                                <input type="file" accept="image/*" class="form-control" name="background" id="edit-background" value="{{ $item->background }}">
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
         <!-- Judul -->
-        <form action="{{ route('judul.update', $item->id) }}" method="POST">
+        <form action="{{ route('content.update', $item->id) }}" method="POST">
             @csrf @method('PUT')
 
             <div class="modal fade" id="editJudulModal{{ $item->id }}" tabindex="-1"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Edit data</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <h5 class="modal-title" id="exampleModalLabel">Edit content</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
                         <div class="modal-body">
@@ -411,17 +477,16 @@
         </form>
 
         <!-- About -->
-        <form action="{{ route('judul.update', $item->id) }}" method="POST">
+        <form action="{{ route('content.update', $item->id) }}" method="POST">
             @csrf @method('PUT')
 
             <div class="modal fade" id="editAboutModal{{ $item->id }}" tabindex="-1"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Edit data</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <h5 class="modal-title" id="exampleModalLabel">Edit content</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
                         <div class="modal-body">
@@ -445,8 +510,38 @@
                 </div>
             </div>
         </form>
+
+        <!-- Footer -->
+        <form action="{{ route('content.update', $item->id) }}" method="POST">
+            @csrf @method('PUT')
+
+            <div class="modal fade" id="editFooterModal{{ $item->id }}" tabindex="-1"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit content</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <input type="hidden" name="id" value="{{ $item->id }}">
+                            <div class="form-input">
+                                <label for="edit-footer">Footer</label>
+                                <textarea name="footer" id="edit-footer">{{ $item->footer }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     @endforeach
-    <!-- Modal Judul End -->
+    <!-- Modal Content End -->
 
 
     <!-- Modal Gallery -->
@@ -455,7 +550,7 @@
             @csrf
             <div class="modal fade" id="tambah-gallery" tabindex="-1" aria-labelledby="tambahGalleryModalLabel"
                 aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="tambahGalleryModalLabel">Tambah gallery</h5>
@@ -494,7 +589,7 @@
             @csrf @method('PUT')
 
             <div class="modal fade" id="edit-gallery" tabindex="-1" aria-labelledby="edit-gallery" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Edit gallery</h5>
@@ -542,7 +637,7 @@
         <form action="{{ route('anggaran.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal fade" id="tambahAnggaran" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Tambah data</h5>
@@ -607,7 +702,7 @@
             @csrf @method('PUT')
 
             <div class="modal fade" id="edit-anggaran" tabindex="-2" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content text-dark">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Edit data</h5>
@@ -671,7 +766,7 @@
 
         <!-- Modal Bukti Pembayaran -->
         <div class="modal fade" id="kwitansiModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content text-dark">
                     <div class="modal-header">
                         <input type="hidden" id="kwitansi_id">
@@ -719,6 +814,12 @@
         });
 
         $('#edit-about-subjudul').summernote({
+            placeholder: 'Hello stand alone ui',
+            tabsize: 2,
+            height: 120
+        });
+
+        $('#edit-footer').summernote({
             placeholder: 'Hello stand alone ui',
             tabsize: 2,
             height: 120

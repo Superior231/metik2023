@@ -5,14 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Judul extends Model
+class Content extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'logo',
+        'background',
         'title',
         'subtitle',
         'about_title',
-        'about_subtitle'
+        'about_subtitle',
+        'footer'
     ];
 }

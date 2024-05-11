@@ -7,11 +7,17 @@
 
 @section('content')
     <!-- Banner 1 - Landing Page -->
-    <div class="banner" id="home" style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('assets/img/bg.jpg')}}');">
+    @foreach ($content as $item)
+    <div class="banner" id="home" style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ $item->background ? asset('storage/background/' . $item->background) : asset('assets/img/bg.jpg')}}');">
+    @endforeach
         <!-- Navbar -->
         <nav class="navbar px-3">
             <div class="container">
-                <a class="navbar-brand" href=""><img src="{{ url('/assets/img/logo.png') }}" alt="metik_2023" style="width: 100px;"></a>
+                @foreach ($content as $item)
+                    <a class="navbar-brand" href="">
+                        <img src="{{ asset('storage/logo/' . $item->logo) }}" alt="metik_2023" style="width: 100px;">
+                    </a>  
+                @endforeach
                 <ul class="links">
                     <li><a href="#home" class="active text-light">Home</a></li>
                     <li><a href="#about">About</a></li>
@@ -39,7 +45,7 @@
 
         <!-- Content Banner -->
         <div class="content px-0 px-lg-3">
-            @foreach ($judul as $item)
+            @foreach ($content as $item)
                 <div class="title">
                     {!! $item->title !!}
                 </div>
@@ -68,39 +74,41 @@
             <div class="label-about" id="about">
                 <h2><b>About</b></h2>
             </div>
-
-            <div class="row row-cols-1 row-cols-lg-2">
-                <div class="col col-lg-4 col-md-6 col-sm-12">
-                    <div class="text-about">
-                        <h3>{!! $item->about_title !!}</h3>
+            
+            @foreach ($content as $item)
+                <div class="row row-cols-1 row-cols-lg-2">
+                    <div class="col col-lg-4 col-md-6 col-sm-12">
+                        <div class="text-about">
+                            <h3>{!! $item->about_title !!}</h3>
+                        </div>
+                    </div>
+                    <div class="col col-lg-8 col-md-6 col-sm-12">
+                        <div class="hidden-about text-secondary">
+                            <p>{!! $item->about_subtitle !!}</p>
+                        </div>
+                        <div class="about-subjudul-container text-secondary">
+                            <!-- Fungsi implode  -->
+                            <?php
+                                $about_subtitle = strip_tags($item->about_subtitle);
+                                $wordLimit = 40;
+                                if (str_word_count($about_subtitle) > $wordLimit) {
+                                    $about_subtitle = implode(' ', array_slice(str_word_count($about_subtitle, 2), 0, $wordLimit)) . ' ...';
+                                }
+                            ?>
+                            <p>{!! $about_subtitle !!}</p>
+                        </div>
+                        <button class="seeAll text-light toggle-button" id="toggleButtonSeeAll">See All</button>
                     </div>
                 </div>
-                <div class="col col-lg-8 col-md-6 col-sm-12">
-                    <div class="hidden-about text-secondary">
-                        <p>{!! $item->about_subtitle !!}</p>
-                    </div>
-                    <div class="about-subjudul-container text-secondary">
-                        <!-- Fungsi implode  -->
-                        <?php
-                            $about_subtitle = strip_tags($item->about_subtitle);
-                            $wordLimit = 40;
-                            if (str_word_count($about_subtitle) > $wordLimit) {
-                                $about_subtitle = implode(' ', array_slice(str_word_count($about_subtitle, 2), 0, $wordLimit)) . ' ...';
-                            }
-                        ?>
-                        <p>{!! $about_subtitle !!}</p>
-                    </div>
-                    <button class="seeAll text-light toggle-button" id="toggleButtonSeeAll">See All</button>
-                </div>
-            </div>
+            @endforeach
 
         </div>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
             <path fill="#160e32" fill-opacity="1"
-                d="M0,288L21.8,250.7C43.6,213,87,139,131,112C174.5,85,218,107,262,144C305.5,181,349,235,393,229.3C436.4,224,480,160,524,160C567.3,160,611,224,655,256C698.2,288,742,288,785,272C829.1,256,873,224,916,186.7C960,149,1004,107,1047,122.7C1090.9,139,1135,213,1178,213.3C1221.8,213,1265,139,1309,122.7C1352.7,107,1396,149,1418,170.7L1440,192L1440,320L1418.2,320C1396.4,320,1353,320,1309,320C1265.5,320,1222,320,1178,320C1134.5,320,1091,320,1047,320C1003.6,320,960,320,916,320C872.7,320,829,320,785,320C741.8,320,698,320,655,320C610.9,320,567,320,524,320C480,320,436,320,393,320C349.1,320,305,320,262,320C218.2,320,175,320,131,320C87.3,320,44,320,22,320L0,320Z">
+                    d="M0,288L21.8,250.7C43.6,213,87,139,131,112C174.5,85,218,107,262,144C305.5,181,349,235,393,229.3C436.4,224,480,160,524,160C567.3,160,611,224,655,256C698.2,288,742,288,785,272C829.1,256,873,224,916,186.7C960,149,1004,107,1047,122.7C1090.9,139,1135,213,1178,213.3C1221.8,213,1265,139,1309,122.7C1352.7,107,1396,149,1418,170.7L1440,192L1440,320L1418.2,320C1396.4,320,1353,320,1309,320C1265.5,320,1222,320,1178,320C1134.5,320,1091,320,1047,320C1003.6,320,960,320,916,320C872.7,320,829,320,785,320C741.8,320,698,320,655,320C610.9,320,567,320,524,320C480,320,436,320,393,320C349.1,320,305,320,262,320C218.2,320,175,320,131,320C87.3,320,44,320,22,320L0,320Z">
             </path>
         </svg>
-    </div>
+    </div>   
     <!-- Banner 2 - About End -->
 
 
@@ -241,59 +249,48 @@
 
 
     <!-- Footer -->
-    <footer class="footer" id="contacts">
-        <div class="container">
-            <div class="row row-cols-1 row-cols-lg-4 row-cols-md-3 row-cols-sm-12 py-4 px-2">
-                <div class="col col-lg-6 col-md-7 col-sm-12">
-                    <div class="layout-logo d-flex">
-                        <img src="{{ url('/assets/img/logo.png') }}" alt="logo_metik_2023" style="width: 150px;">
-                    </div>
-
-                    <p class="text-footer text-light ms-1" style="opacity: 0.4;">METIK adalah kegiatan untuk mengenal
-                        Teknik, yaitu Teknik Mesin, Teknik Industri, Teknik Informatika, Teknik Sipil, dan Sistem Informasi.
-                        Tujuan dari kegiatan ini adalah untuk pengenalan kampus, pengenalan Fakultas Teknik dan Ilmu
-                        Komputer, dan untuk menjalin ikatan emosional / rasa memiliki Fakultas Teknik dan Ilmu Komputer.
-                    </p>
-                </div>
-
-                <div class="col col-lg-2 col-md-1 col-sm-12"></div>
-
-                <div class="col col-lg-2 col-md-4 col-sm-6">
-                    <h4 style="width: min-content;">Links</h4>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#gallery">Gallery</a></li>
-                        <li><a href="#anggaran">Anggaran</a></li>
-                    </ul>
-                </div>
-
-                <div class="col col-lg-2 col-md-12 col-sm-6">
-                    <h4 style="width: min-content;">Contacts</h4>
-                    <ul>
-                        <li><a href="#">Help / FAQ</a></li>
-                    </ul>
-                </div>
-
-                <div class="col col-lg-12 col-md-12 col-sm-12 mt-2">
-                    <div class="social-media ms-1">
-                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}" alt="logo_informatika"
-                            style="width: 40px;">
-                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}" alt="logo_sistem_informasi"
-                            style="width: 40px;">
-                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}" alt="logo_mesin" style="width: 40px;">
-                        <img class="me-2" src="{{ url('/assets/img/logo_informatika.jpg') }}" alt="logo_industri" style="width: 40px;">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
+    @foreach ($content as $item)
+        <footer class="footer" id="contacts">
             <div class="container">
-                <h6 class="px-2 pt-2 text-center">copyright &copy;2023 Metik.</h6>
+                <div class="row row-cols-1 row-cols-lg-4 row-cols-md-3 row-cols-sm-12 py-4 px-2">
+                    <div class="col col-lg-6 col-md-7 col-sm-12">
+                        <div class="layout-logo d-flex">
+                            <img src="{{ asset('storage/logo/' . $item->logo) }}" alt="logo_metik_2023" style="width: 150px;">
+                        </div>
+
+                        <p class="text-footer text-light ms-1" style="opacity: 0.4;">
+                            {!! $item->footer !!}
+                        </p>
+                    </div>
+
+                    <div class="col col-lg-2 col-md-1 col-sm-12"></div>
+
+                    <div class="col col-lg-2 col-md-4 col-sm-6">
+                        <h4 style="width: min-content;">Links</h4>
+                        <ul>
+                            <li><a href="#home">Home</a></li>
+                            <li><a href="#about">About</a></li>
+                            <li><a href="#gallery">Gallery</a></li>
+                            <li><a href="#anggaran">Anggaran</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col col-lg-2 col-md-12 col-sm-6">
+                        <h4 style="width: min-content;">Contacts</h4>
+                        <ul>
+                            <li><a href="#">Help / FAQ</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </div>
-    </footer>
+
+            <div class="footer-bottom">
+                <div class="container">
+                    <h6 class="px-2 pt-2 text-center">copyright &copy;2023 Metik.</h6>
+                </div>
+            </div>
+        </footer>  
+    @endforeach
     <!-- Footer End -->
 
 

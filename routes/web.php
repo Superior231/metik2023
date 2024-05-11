@@ -32,7 +32,7 @@ Route::get('/anggaran/pdf', [HomeController::class, 'anggaran_pdf'])->withoutMid
 
 Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function() {
     Route::get('/', [AdminController::class, 'index'])->name('admin');
-    Route::put('/judul/{id}', [AdminController::class, 'update'])->name('judul.update');
+    Route::put('/content/{id}', [AdminController::class, 'update'])->name('content.update');
 
     Route::resource('gallery', GalleryController::class);
     Route::resource('anggaran', AnggaranController::class);

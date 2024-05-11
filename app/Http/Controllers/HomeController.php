@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use App\Exports\AnggaranExport;
 use App\Exports\AnggaranExportPdf;
 use App\Models\Anggaran;
+use App\Models\Content;
 use App\Models\Gallery;
-use App\Models\Judul;
 use Maatwebsite\Excel\Facades\Excel;
-use PhpOffice\PhpSpreadsheet\Writer\Pdf;
 
 class HomeController extends Controller
 {
@@ -29,14 +28,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $judul = Judul::all();
+        $content = Content::all();
         $gallery = Gallery::all();
         $anggaran = Anggaran::all();
 
         $jumlah_anggaran = $anggaran->sum('harga');
 
         return view('index', [
-            'judul' => $judul,
+            'content' => $content,
             'gallery' => $gallery,
             'anggaran' => $anggaran,
             'jml_anggaran' => $jumlah_anggaran

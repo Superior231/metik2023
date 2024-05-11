@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('juduls', function (Blueprint $table) {
+        Schema::create('contents', function (Blueprint $table) {
             $table->id();
+            $table->string('logo')->nullable();
+            $table->string('background')->nullable();
             $table->longText('title')->nullable();
             $table->longText('subtitle')->nullable();
             $table->longText('about_title')->nullable();
             $table->longText('about_subtitle')->nullable();
+            $table->longText('footer')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('juduls');
+        Schema::dropIfExists('contents');
     }
 };
