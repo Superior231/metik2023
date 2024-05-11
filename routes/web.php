@@ -26,6 +26,10 @@ Route::get('/', [HomeController::class, 'index'])->withoutMiddleware('auth')->na
 Route::get('/download/{id}', [HomeController::class, 'download_image'])->withoutMiddleware('auth')->name('image.download');
 Route::get('/kwitansi/{id}', [HomeController::class, 'download_kwitansi'])->withoutMiddleware('auth')->name('kwitansi.download');
 
+Route::get('/anggaran/excel', [HomeController::class, 'anggaran_excel'])->withoutMiddleware('auth')->name('anggaran.excel');
+Route::get('/anggaran/pdf', [HomeController::class, 'anggaran_pdf'])->withoutMiddleware('auth')->name('anggaran.pdf');
+
+
 Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function() {
     Route::get('/', [AdminController::class, 'index'])->name('admin');
     Route::put('/judul/{id}', [AdminController::class, 'update'])->name('judul.update');

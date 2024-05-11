@@ -193,10 +193,10 @@
 
             <!-- Download file pdf Anggaran -->
             <div class="download-action mt-4">
-                <a href="cetak_anggaran.php" target="_blank">
+                <a href="{{ route('anggaran.pdf') }}">
                     <button class="btn btn-primary" style="border-radius: 0px;">Download pdf</button>
                 </a>
-                <a href="export_to_excel.php" target="_blank">
+                <a href="{{ route('anggaran.excel') }}">
                     <button class="btn btn-success" style="border-radius: 0px;">Export to Excel</button>
                 </a>
             </div>
@@ -211,8 +211,9 @@
                             <tr>
                                 <td><span class="text-light align-top"><b style="color: red;">*</b></span></td>
                                 <td>&nbsp;</td>
-                                <td><span class="text-light">adalah tanda untuk menentukan hasil kali dari Satuan dengan
-                                        Jumlah.</span></td>
+                                <td>
+                                    <span class="text-light">adalah tanda untuk menentukan hasil kali dari Satuan dengan Jumlah.</span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

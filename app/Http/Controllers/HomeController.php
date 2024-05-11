@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AnggaranExport;
+use App\Exports\AnggaranExportPdf;
 use App\Models\Anggaran;
 use App\Models\Gallery;
 use App\Models\Judul;
-use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf;
 
 class HomeController extends Controller
 {
@@ -64,5 +67,18 @@ class HomeController extends Controller
         }
 
         return redirect()->back()->with('error', 'Gambar tidak ditemukan!');
+    }
+
+
+    // Exports Table to Excel and Pdf
+    public function anggaran_excel()
+    {
+        return Excel::download(new AnggaranExport, 'Anggaran METIK 2023.xlsx');
+    }
+
+    public function anggaran_pdf()
+    {
+        $exportPdf = new AnggaranExportPdf();
+        $exportPdf->exportPdf();
     }
 }
